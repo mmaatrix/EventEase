@@ -1,0 +1,13 @@
+<Router AppAssembly="@typeof(App).Assembly" NotFoundPage="typeof(Pages.NotFound)">
+    <Found Context="routeData">
+        <ErrorBoundary>
+            <ChildContent>
+                <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)"/>
+            </ChildContent>
+            <ErrorContent>
+                <p class="alert alert-danger">An error occurred while rendering.</p>
+            </ErrorContent>
+        </ErrorBoundary>
+        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+    </Found>
+</Router>

@@ -1,0 +1,20 @@
+# Build artifacts
+bin/
+obj/
+
+# VS/IDE files
+.vs/
+*.user
+*.suo
+
+# Logs and temp
+*.log
+*.tmp
+*.cache
+
+# Publish
+EventEase/bin/
+EventEase/obj/
+
+# Node modules (if any)
+node_modules/

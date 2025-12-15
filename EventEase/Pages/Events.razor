@@ -1,0 +1,51 @@
+@page "/events"
+@using EventEase.Models
+@using EventEase.Services
+@inject SessionState State
+
+<h3>Events</h3>
+
+<div class="mb-3">
+    <button class="btn btn-success" @onclick="AddEvent">Add Event</button>
+</div>
+
+@if (events.Count == 0)
+{
+    <p>No events yet.</p>
+}
+else
+{
+    @foreach (var e in events)
+    {
+        <EventCard Event="e" EventChanged="OnEventChanged" />
+    }
+}
+
+@code {
+    private List<EventModel> events = new();
+
+    protected override void OnInitialized()
+    {
+        if (State.Events.Count == 0)
+        {
+            State.SeedEvents(new[]
+            {
+                new EventModel { Title = "Tech Meetup", Date = DateTime.Today.AddDays(7), Location = "Hall A", Description = "Community meetup" },
+                new EventModel { Title = "Workshop", Date = DateTime.Today.AddDays(14), Location = "Lab 1", Description = "Hands-on workshop" }
+            });
+        }
+        events = State.Events.ToList();
+    }
+
+    private void AddEvent()
+    {
+        var item = new EventModel { Title = "New Event", Date = DateTime.Today, Location = "TBD", Description = "" };
+        State.AddEvent(item);
+        events = State.Events.ToList();
+    }
+
+    private Task OnEventChanged(EventModel model)
+    {
+        return Task.CompletedTask;
+    }
+}

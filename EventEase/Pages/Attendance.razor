@@ -1,0 +1,59 @@
+@page "/attendance"
+@using EventEase.Models
+@using EventEase.Services
+@inject SessionState State
+
+<h3>Attendance Tracker</h3>
+
+<div class="mb-3">
+    <span class="badge bg-success me-2">Present: @State.PresentCount</span>
+    <span class="badge bg-secondary">Absent: @State.AbsentCount</span>
+</div>
+
+@if (State.Registrations.Count == 0)
+{
+    <p>No registrations yet.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Event</th>
+                <th>Present</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in State.Registrations)
+            {
+                <tr>
+                    <td>@r.Name</td>
+                    <td>@r.Email</td>
+                    <td>@r.Phone</td>
+                    <td>@r.EventTitle</td>
+                    <td>@(r.IsPresent ? "Yes" : "No")</td>
+                    <td>
+                        <button class="btn btn-outline-primary btn-sm" @onclick="() => Toggle(r)">Toggle</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private void Toggle(RegistrationModel r)
+    {
+        State.ToggleAttendance(r);
+        StateChanged();
+    }
+
+    private void StateChanged()
+    {
+        StateHasChanged();
+    }
+}

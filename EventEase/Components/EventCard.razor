@@ -1,0 +1,31 @@
+@using EventEase.Models
+
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="mb-2">
+            <label class="form-label">Title</label>
+            <InputText class="form-control" @bind-Value="Event.Title" />
+        </div>
+        <div class="mb-2">
+            <label class="form-label">Date</label>
+            <InputDate class="form-control" @bind-Value="Event.Date" />
+        </div>
+        <div class="mb-2">
+            <label class="form-label">Location</label>
+            <InputText class="form-control" @bind-Value="Event.Location" />
+        </div>
+        <div class="mb-2">
+            <label class="form-label">Description</label>
+            <InputTextArea class="form-control" @bind-Value="Event.Description" />
+        </div>
+        <button class="btn btn-primary" @onclick="Save">Save</button>
+    </div>
+    <div class="card-footer">
+        <strong>@Event.Title</strong> • @Event.Date.ToShortDateString() • @Event.Location
+    </div>
+</div>
+@code {
+    [Parameter] public EventModel Event { get; set; } = new();
+    [Parameter] public EventCallback<EventModel> EventChanged { get; set; }
+    private Task Save() => EventChanged.InvokeAsync(Event);
+}

@@ -1,0 +1,58 @@
+@page "/register"
+@using EventEase.Models
+@using EventEase.Services
+@inject SessionState State
+@inject NavigationManager Nav
+
+<h3>Registration</h3>
+
+<EditForm Model="model" OnValidSubmit="OnSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-2">
+        <label class="form-label">Name</label>
+        <InputText class="form-control" @bind-Value="model.Name" />
+    </div>
+    <div class="mb-2">
+        <label class="form-label">Email</label>
+        <InputText class="form-control" @bind-Value="model.Email" />
+    </div>
+    <div class="mb-2">
+        <label class="form-label">Phone</label>
+        <InputText class="form-control" @bind-Value="model.Phone" />
+    </div>
+    <div class="mb-2">
+        <label class="form-label">Event</label>
+        <InputSelect class="form-select" @bind-Value="model.EventTitle">
+            <option value="">Select an event</option>
+            @foreach (var e in State.Events)
+            {
+                <option value="@e.Title">@e.Title</option>
+            }
+        </InputSelect>
+    </div>
+    <button class="btn btn-primary" type="submit">Register</button>
+</EditForm>
+
+@code {
+    private RegistrationModel model = new();
+
+    protected override void OnInitialized()
+    {
+        if (State.Events.Count == 0)
+        {
+            State.SeedEvents(new[]
+            {
+                new EventModel { Title = "Tech Meetup", Date = DateTime.Today.AddDays(7), Location = "Hall A", Description = "Community meetup" }
+            });
+        }
+    }
+
+    private void OnSubmit()
+    {
+        State.AddRegistration(model);
+        model = new();
+        Nav.NavigateTo("/attendance");
+    }
+}
